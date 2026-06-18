@@ -18,6 +18,10 @@ import rock from "./assets/rock.svg";
 import steel from "./assets/steel.svg";
 import water from "./assets/water.svg";
 import pokeball from "./assets/pokeball.svg";
+import { Pokemon } from "../src/core/entities/Pokemon"
+import { PokeApiPokemonRepository } from "./infrastructure/api/PokeApiPokemonRepository";
+import { searchPokemon } from "../src/application/useCases/searchPokemon";
+import { sortPokemon,  type PokemonSortOption,} from "./application/useCases/sortPokemon";
 
 /**
  *  Iconos de los tipos de Pokémon
@@ -55,162 +59,43 @@ const regs = [
   "paldea",
 ];
 
+const pokemonRepository = new PokeApiPokemonRepository();
+
 export const App = () => {
-  const [ldr, setLdr] = useState<any>(false);
-  const [fltr, setFltr] = useState<any>(false);
-  const [result, setResult] = useState<any>([]);
-  const [finalResult, setFinalResult] = useState<any>([]);
-  const [busqueda, setBusqueda] = useState<any>("");
+  const [ldr, setLdr] = useState(false);
+  const [fltr, setFltr] = useState(false);
+  const [result, setResult] = useState<Pokemon[]>([]);
+  const [finalResult, setFinalResult] = useState<Pokemon[]>([]);
+  const [busqueda, setBusqueda] = useState("");
   const [reg, setreg] = useState<any>("kanto");
-  const [showregs, setShowregs] = useState<any>(false);
-  const [showSort, setShowSort] = useState<any>(false);
-  const [sorting, setSort] = useState<any>("default");
+  const [showregs, setShowregs] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [sorting, setSort] = useState<PokemonSortOption>("default");
 
   useEffect(() => {
-    /**
-     *  Carga de datos de Pokémons y gestión de estado de cargando.
-     */
     const getData = async () => {
       setLdr(true);
       setFltr(true);
 
-      let regStart, regEnd;
-      if (reg === "kanto") {
-        regStart = 0;
-        regEnd = 151;
-      } else if (reg === "johto") {
-        regStart = 151;
-        regEnd = 100;
-      } else if (reg === "hoenn") {
-        regStart = 251;
-        regEnd = 135;
-      } else if (reg === "sinnoh") {
-        regStart = 386;
-        regEnd = 108;
-      } else if (reg === "unova") {
-        regStart = 494;
-        regEnd = 155;
-      } else if (reg === "kalos") {
-        regStart = 649;
-        regEnd = 72;
-      } else if (reg === "alola") {
-        regStart = 721;
-        regEnd = 88;
-      } else if (reg === "galar") {
-        regStart = 809;
-        regEnd = 96;
-      } else if (reg === "paldea") {
-        regStart = 905;
-        regEnd = 120;
-      } else {
-        regStart = 0;
-        regEnd = 151;
-      }
-      const { results }: any = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${regStart}&limit=${regEnd}`,
-      ).then((res) => res.json());
-      const result = await Promise.all(
-        results.map(
-          async ({ url }) => await fetch(url).then((res) => res.json()),
-        ),
-      );
-      setResult(result);
-      setFinalResult(result);
+      const pokemon = await pokemonRepository.getByRegion(reg);
+
+      setResult(pokemon);
+      setFinalResult(pokemon);
       setLdr(false);
+      setFltr(false);
     };
+
     getData();
   }, [reg]);
-  /**
-   * Filters results based on input query term.
-   */
+
   useEffect(() => {
-    setFinalResult(
-      result.filter(
-        (res) =>
-          res.name.includes(busqueda.toLowerCase()) ||
-          !!res.types.find((type) =>
-            type.type.name.startsWith(busqueda.toLowerCase()),
-          ),
-      ),
-    );
+    setFinalResult(searchPokemon(result, busqueda));
     setFltr(false);
-  }, [result[0]?.id, busqueda]);
-  /**
-   * Sorts results based on selected sorting criteria.
-   */
+  }, [result, busqueda]);
+
   useEffect(() => {
-    if (sorting !== "default") {
-      if (sorting === "hp") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "hp");
-            const bStat = b.stats.find((stat) => stat.stat.name === "hp");
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
-      }
-      if (sorting === "attack") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "attack");
-            const bStat = b.stats.find((stat) => stat.stat.name === "attack");
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
-      }
-      if (sorting === "defense") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "defense");
-            const bStat = b.stats.find((stat) => stat.stat.name === "defense");
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
-      }
-      if (sorting === "special-attack") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === "special-attack",
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === "special-attack",
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
-      }
-      if (sorting === "special-defense") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find(
-              (stat) => stat.stat.name === "special-defense",
-            );
-            const bStat = b.stats.find(
-              (stat) => stat.stat.name === "special-defense",
-            );
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
-      }
-      if (sorting === "speed") {
-        setFinalResult((prev) =>
-          [...prev].sort((a, b) => {
-            const aStat = a.stats.find((stat) => stat.stat.name === "speed");
-            const bStat = b.stats.find((stat) => stat.stat.name === "speed");
-            return bStat.base_stat - aStat.base_stat;
-          }),
-        );
-      }
-    }
-    if (sorting === "default") {
-      setFinalResult((prev) =>
-        [...prev].sort((a, b) => {
-          return a.id - b.id;
-        }),
-      );
-    }
-  }, [finalResult[0]?.id, sorting]);
+    setFinalResult((prev) => sortPokemon(prev, sorting));},
+    [sorting]);
 
   return (
     <div className="layout">
@@ -541,7 +426,7 @@ export const App = () => {
             <ul className="grid">
               {finalResult.map((res) => {
                 const customStyles: any = {
-                  "--color-type": `var(--color-${res.types[0].type.name}`,
+                  "--color-type": `var(--color-${res.types[0]}`,
                 };
 
                 return (
@@ -553,24 +438,22 @@ export const App = () => {
                         </div>
                         <div className="card__tag">
                           <img
-                            src={icns[res.types[0].type.name]}
+                            src={icns[res.types[0]]}
                             className="card__type"
-                            alt={`${res.types[0].type.name} primary type`}
+                            alt={`${res.types[0]} primary type`}
                           />
                           {res.types[1] && (
                             <img
-                              src={icns[res.types[1].type.name]}
+                              src={icns[res.types[1]]}
                               className="card__type"
-                              alt={`${res.types[1].type.name} secondary type`}
+                              alt={`${res.types[1]} secondary type`}
                             />
                           )}
                         </div>
                       </header>
                       <img
                         className="card__avatar"
-                        src={
-                          res.sprites.other["official-artwork"].front_default
-                        }
+                        src={res.artworkUrl}
                         loading="lazy"
                         alt={`${res.name} artwork`}
                       />
@@ -582,22 +465,19 @@ export const App = () => {
                               <p className="stat__name" aria-hidden="true">
                                 Hp
                               </p>
-                              <p>{res.stats[0].base_stat}</p>
+                              <p>{res.stats.hp}</p>
                             </div>
-                            <progress
-                              value={res.stats[0].base_stat}
-                              max="255"
-                            ></progress>
+                            <progress value={res.stats.hp} max="255"></progress>
                           </li>
                           <li className="card__stat" aria-label="Attack">
                             <div className="stat__value">
                               <p className="stat__name" aria-hidden="true">
                                 At
                               </p>
-                              <p>{res.stats[1].base_stat}</p>
+                              <p>{res.stats.attack}</p>
                             </div>
                             <progress
-                              value={res.stats[1].base_stat}
+                              value={res.stats.attack}
                               max="255"
                             ></progress>
                           </li>
@@ -606,10 +486,10 @@ export const App = () => {
                               <p className="stat__name" aria-hidden="true">
                                 Df
                               </p>
-                              <p>{res.stats[2].base_stat}</p>
+                              <p>{res.stats.defense}</p>
                             </div>
                             <progress
-                              value={res.stats[2].base_stat}
+                              value={res.stats.defense}
                               max="255"
                             ></progress>
                           </li>
@@ -621,10 +501,10 @@ export const App = () => {
                               <p className="stat__name" aria-hidden="true">
                                 SpA
                               </p>
-                              <p>{res.stats[3].base_stat}</p>
+                              <p>{res.stats.specialAttack}</p>
                             </div>
                             <progress
-                              value={res.stats[3].base_stat}
+                              value={res.stats.specialAttack}
                               max="255"
                             ></progress>
                           </li>
@@ -636,10 +516,10 @@ export const App = () => {
                               <p className="stat__name" aria-hidden="true">
                                 SpD
                               </p>
-                              <p>{res.stats[4].base_stat}</p>
+                              <p>{res.stats.specialDefense}</p>
                             </div>
                             <progress
-                              value={res.stats[4].base_stat}
+                              value={res.stats.specialDefense}
                               max="255"
                             ></progress>
                           </li>
@@ -648,10 +528,10 @@ export const App = () => {
                               <p className="stat__name" aria-hidden="true">
                                 Spd
                               </p>
-                              <p>{res.stats[5].base_stat}</p>
+                              <p>{res.stats.speed}</p>
                             </div>
                             <progress
-                              value={res.stats[5].base_stat}
+                              value={res.stats.speed}
                               max="255"
                             ></progress>
                           </li>
