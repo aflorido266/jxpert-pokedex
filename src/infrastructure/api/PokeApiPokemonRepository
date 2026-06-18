@@ -1,6 +1,0 @@
-import PokemonRepository from "../../core/repositories/PokemonRepository";
-import region from "../api/regions";
-import 
-
-
-
