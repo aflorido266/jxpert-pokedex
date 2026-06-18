@@ -1,12 +1,6 @@
-import type {Pokemon} from "../../core/entities/Pokemon"
-import type {pokemonMapper} from "../../core/entities/pokemonMapper"
-
-export async function getPokemonts():Promise<Pokemon[]>{
-const response = await fetch(...);
-const data = await response.json();
-return  data.map(pokemonMapper);
-
-}
+import PokemonRepository from "../../core/repositories/PokemonRepository";
+import region from "../api/regions";
+import 
 
 
 

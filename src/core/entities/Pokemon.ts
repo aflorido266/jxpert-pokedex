@@ -18,16 +18,6 @@ export type PokemonTypeName =
   | "steel"
   | "water";
 
-// export type PokemontRegionName = 
-//   "kanto"|
-//   "johto"|
-//   "hoenn"|
-//   "sinnoh"|
-//   "unova"|
-//   "kalos"|
-//   "alola"|
-//   "galar"|
-//   "paldea";
 
 export interface PokemonStats {
 hp: number;
