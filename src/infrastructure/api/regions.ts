@@ -1,12 +1,19 @@
-export interface RegionRange {
-  name: string;
-  offset: number;
-  limit: number ;
-}
-
 export type PokemonRegionName =
+  | "kanto"
+  | "johto"
+  | "hoenn"
+  | "sinnoh"
+  | "unova"
+  | "kalos"
+  | "alola"
+  | "galar"
+  | "paldea";
 
-
+export interface RegionRange {
+  name: PokemonRegionName;
+  offset: number;
+  limit: number;
+}
 
 export const REGIONS: RegionRange[] = [
   { name: "kanto", offset: 0, limit: 151 },
@@ -24,5 +31,3 @@ export function getRegionRange(regionName: string): RegionRange {
   const region = REGIONS.find((r) => r.name === regionName);
   return region ?? REGIONS[0];
 }
-
-
