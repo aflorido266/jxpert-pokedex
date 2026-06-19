@@ -4,6 +4,10 @@ export interface RegionRange {
   limit: number ;
 }
 
+export type PokemonRegionName =
+
+
+
 export const REGIONS: RegionRange[] = [
   { name: "kanto", offset: 0, limit: 151 },
   { name: "johto", offset: 151, limit: 100 },

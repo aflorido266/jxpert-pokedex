@@ -1,51 +1,17 @@
 import { useEffect, useState } from "react";
-import bug from "./assets/bug.svg";
-import dark from "./assets/dark.svg";
-import dragon from "./assets/dragon.svg";
-import electric from "./assets/electric.svg";
-import fairy from "./assets/fairy.svg";
-import fighting from "./assets/fighting.svg";
-import fire from "./assets/fire.svg";
-import flying from "./assets/flying.svg";
-import ghost from "./assets/ghost.svg";
-import grass from "./assets/grass.svg";
-import ground from "./assets/ground.svg";
-import ice from "./assets/ice.svg";
-import normal from "./assets/normal.svg";
-import poison from "./assets/poison.svg";
-import psychic from "./assets/psychic.svg";
-import rock from "./assets/rock.svg";
-import steel from "./assets/steel.svg";
-import water from "./assets/water.svg";
-import pokeball from "./assets/pokeball.svg";
-import { Pokemon } from "../src/core/entities/Pokemon"
+import { Pokemon } from "./core/entities/Pokemon";
 import { PokeApiPokemonRepository } from "./infrastructure/api/PokeApiPokemonRepository";
-import { searchPokemon } from "../src/application/useCases/searchPokemon";
-import { sortPokemon,  type PokemonSortOption,} from "./application/useCases/sortPokemon";
-
+import { searchPokemon } from "./application/useCases/searchPokemon";
+import { sortPokemon, type PokemonSortOption,} from "./application/useCases/sortPokemon";
+import { getPokemonByRegion } from "./application/getPokemonByRegion";
+import { PokemonCard } from "./ui/components/molecules/PokemonCard";
+import { PokemonGrid } from "./ui/components/organisms/PokemonGrid"
+import { Footer } from "./ui/components/organisms/footer" 
+import { Header } from "./ui/components/organisms/Header"
+import pokeball from "./assets/pokeball.svg";
 /**
  *  Iconos de los tipos de Pokémon
  */
-const icns: any = {
-  bug,
-  dark,
-  dragon,
-  electric,
-  fairy,
-  fighting,
-  fire,
-  flying,
-  ghost,
-  grass,
-  ground,
-  ice,
-  normal,
-  poison,
-  psychic,
-  rock,
-  steel,
-  water,
-};
 
 const regs = [
   "kanto",
@@ -76,8 +42,7 @@ export const App = () => {
     const getData = async () => {
       setLdr(true);
       setFltr(true);
-
-      const pokemon = await pokemonRepository.getByRegion(reg);
+      const pokemon = await getPokemonByRegion(pokemonRepository, reg);
 
       setResult(pokemon);
       setFinalResult(pokemon);
@@ -89,21 +54,18 @@ export const App = () => {
   }, [reg]);
 
   useEffect(() => {
-    setFinalResult(searchPokemon(result, busqueda));
-    setFltr(false);
-  }, [result, busqueda]);
+    const filteredPokemon = searchPokemon(result, busqueda);
+    const sortedPokemon = sortPokemon(filteredPokemon, sorting);
 
-  useEffect(() => {
-    setFinalResult((prev) => sortPokemon(prev, sorting));},
-    [sorting]);
+    setFinalResult(sortedPokemon);
+    setFltr(false);
+  }, [result, busqueda, sorting]);
 
   return (
     <div className="layout">
-      <header className="header">
-        <img src={pokeball} alt="" className="header__logo" />
-        <p className="header__title">Pokédex</p>
-      </header>
-
+      
+       <Header/>
+   
       {/* Searcher */}
       <main className="container">
         <section className="search">
@@ -423,139 +385,14 @@ export const App = () => {
           )}
           {/* Prints cards */}
           {!fltr && !ldr && finalResult.length > 0 && (
-            <ul className="grid">
-              {finalResult.map((res) => {
-                const customStyles: any = {
-                  "--color-type": `var(--color-${res.types[0]}`,
-                };
-
-                return (
-                  <li key={`pokemon-card-${res.id}`}>
-                    <article className="card" style={customStyles}>
-                      <header className="card__head">
-                        <div className="card__tag">
-                          <p>#{res.id.toString().padStart(3, "0")}</p>
-                        </div>
-                        <div className="card__tag">
-                          <img
-                            src={icns[res.types[0]]}
-                            className="card__type"
-                            alt={`${res.types[0]} primary type`}
-                          />
-                          {res.types[1] && (
-                            <img
-                              src={icns[res.types[1]]}
-                              className="card__type"
-                              alt={`${res.types[1]} secondary type`}
-                            />
-                          )}
-                        </div>
-                      </header>
-                      <img
-                        className="card__avatar"
-                        src={res.artworkUrl}
-                        loading="lazy"
-                        alt={`${res.name} artwork`}
-                      />
-                      <section className="card__content">
-                        <h3 className="card__title">{res.name}</h3>
-                        <ul aria-description="Stats resume">
-                          <li className="card__stat" aria-label="Health points">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Hp
-                              </p>
-                              <p>{res.stats.hp}</p>
-                            </div>
-                            <progress value={res.stats.hp} max="255"></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Attack">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                At
-                              </p>
-                              <p>{res.stats.attack}</p>
-                            </div>
-                            <progress
-                              value={res.stats.attack}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Defense">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Df
-                              </p>
-                              <p>{res.stats.defense}</p>
-                            </div>
-                            <progress
-                              value={res.stats.defense}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special attack"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpA
-                              </p>
-                              <p>{res.stats.specialAttack}</p>
-                            </div>
-                            <progress
-                              value={res.stats.specialAttack}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li
-                            className="card__stat"
-                            aria-label="Special defense"
-                          >
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                SpD
-                              </p>
-                              <p>{res.stats.specialDefense}</p>
-                            </div>
-                            <progress
-                              value={res.stats.specialDefense}
-                              max="255"
-                            ></progress>
-                          </li>
-                          <li className="card__stat" aria-label="Speed">
-                            <div className="stat__value">
-                              <p className="stat__name" aria-hidden="true">
-                                Spd
-                              </p>
-                              <p>{res.stats.speed}</p>
-                            </div>
-                            <progress
-                              value={res.stats.speed}
-                              max="255"
-                            ></progress>
-                          </li>
-                        </ul>
-                      </section>
-                    </article>
-                  </li>
-                );
-              })}
-            </ul>
+         <PokemonGrid pokemonList={finalResult} />
           )}
         </section>
         {!ldr && finalResult.length === 0 && (
           <p className="noresults">No results for "{busqueda}"</p>
         )}
       </main>
-
-      <footer className="footer">
-        <p>
-          ©{new Date().getFullYear()} Pokémon. ©1995 -{" "}
-          {new Date().getFullYear()} Nintendo/Creatures Inc./GAME FREAK inc. TM,
-          ®Nintendo.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 };
