@@ -7,6 +7,9 @@ import { SearchBar } from "./ui/components/organisms/SearchBar";
 
 const regs = REGIONS.map((r) => r.name);
 
+
+
+
 export const App = () => {
   const {
     ldr,
@@ -58,6 +61,7 @@ export const App = () => {
         {!ldr && finalResult.length === 0 && (
           <p className="noresults">No results for "{busqueda}"</p>
         )}
+        
       </main>
       <Footer />
     </div>

@@ -85,7 +85,6 @@ export function SearchBar({
     </svg>
   </button>
 </div>
-
     </section>
   );
 }

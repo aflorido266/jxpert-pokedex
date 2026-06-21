@@ -9,4 +9,7 @@ if (!normalizedSearchTerm ){
         (pokemon) =>
             pokemon.name.includes(normalizedSearchTerm) ||
             pokemon.types.some((type) => type.startsWith(normalizedSearchTerm)),    )
+
+
+            
 }

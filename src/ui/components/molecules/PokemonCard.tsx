@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { Pokemon } from "../../../core/entities/Pokemon";
 import { PokemonTypeIcon } from "../atoms/PokemonTypeIcon";
 import { PokemonStat } from "../atoms/PokemonStat";
+import { FavoriteButton } from "../atoms/FavoriteButton"; // ← añadir
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -32,6 +33,7 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
             />
           )}
         </div>
+         <FavoriteButton pokemon={pokemon} /> {/* ← añadir aquí */}
       </header>
 
       <img
