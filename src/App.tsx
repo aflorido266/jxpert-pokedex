@@ -1,14 +1,11 @@
-import { usePokemonList } from "./ui/hooks/usePokemonList";
-import { REGIONS } from "./infrastructure/api/regions";
-import { PokemonGrid } from "./ui/components/organisms/PokemonGrid";
-import { Footer } from "./ui/components/organisms/Footer";
-import { Header } from "./ui/components/organisms/Header";
-import { SearchBar } from "./ui/components/organisms/SearchBar";
+import { usePokemonList } from './ui/hooks/usePokemonList'
+import { REGIONS } from './infrastructure/api/regions'
+import { PokemonGrid } from './ui/components/organisms/PokemonGrid'
+import { Footer } from './ui/components/organisms/Footer'
+import { Header } from './ui/components/organisms/Header'
+import { SearchBar } from './ui/components/organisms/SearchBar'
 
-const regs = REGIONS.map((r) => r.name);
-
-
-
+const regs = REGIONS.map((r) => r.name)
 
 export const App = () => {
   const {
@@ -25,7 +22,7 @@ export const App = () => {
     setShowSort,
     sorting,
     setSort,
-  } = usePokemonList();
+  } = usePokemonList()
 
   return (
     <div className="layout">
@@ -38,6 +35,10 @@ export const App = () => {
           setreg={setreg}
           showregs={showregs}
           setShowregs={setShowregs}
+          showSort={showSort} // ← faltaba
+          setShowSort={setShowSort} // ← faltaba
+          sorting={sorting} // ← faltaba
+          setSort={setSort} // ← faltaba
         />
         <section>
           {(ldr || fltr) && (
@@ -61,9 +62,8 @@ export const App = () => {
         {!ldr && finalResult.length === 0 && (
           <p className="noresults">No results for "{busqueda}"</p>
         )}
-        
       </main>
       <Footer />
     </div>
-  );
-};
+  )
+}

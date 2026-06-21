@@ -12,7 +12,7 @@ export class LocalStorageFavoritesRepository implements FavoritesRepository {
 
   add(pokemon: Pokemon): void {
     const current = this.getAll()
-    const sinDuplicado = current.filter((p) => pokemon.id != pokemon.id)
+    const sinDuplicado = current.filter((p) => p.id != pokemon.id)
     const nuevos = [...sinDuplicado, pokemon].slice(-MAX_FAVORITES)
     localStorage.setItem(KEY, JSON.stringify(nuevos))
  }

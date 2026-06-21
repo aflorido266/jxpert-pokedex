@@ -4,10 +4,7 @@ import { PokemonTypeIcon } from "../atoms/PokemonTypeIcon";
 import { PokemonStat } from "../atoms/PokemonStat";
 import { FavoriteButton } from "../atoms/FavoriteButton"; // ← añadir
 
-interface PokemonCardProps {
-  pokemon: Pokemon;
-}
-
+// PokemonCard.tsx — mover FavoriteButton fuera del header
 export function PokemonCard({ pokemon }: PokemonCardProps) {
   const customStyles = {
     "--color-type": `var(--color-${pokemon.types[0]})`,
@@ -19,21 +16,12 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
         <div className="card__tag">
           <p>#{pokemon.id.toString().padStart(3, "0")}</p>
         </div>
-
         <div className="card__tag">
-          <PokemonTypeIcon
-            type={pokemon.types[0]}
-            label={`${pokemon.types[0]} primary type`}
-          />
-
+          <PokemonTypeIcon type={pokemon.types[0]} label={`${pokemon.types[0]} primary type`} />
           {pokemon.types[1] && (
-            <PokemonTypeIcon
-              type={pokemon.types[1]}
-              label={`${pokemon.types[1]} secondary type`}
-            />
+            <PokemonTypeIcon type={pokemon.types[1]} label={`${pokemon.types[1]} secondary type`} />
           )}
         </div>
-         <FavoriteButton pokemon={pokemon} /> {/* ← añadir aquí */}
       </header>
 
       <img
@@ -43,23 +31,16 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
         alt={`${pokemon.name} artwork`}
       />
 
+      <FavoriteButton pokemon={pokemon} /> {/* ← aquí, después de la imagen */}
+
       <section className="card__content">
         <h3 className="card__title">{pokemon.name}</h3>
-
         <ul aria-description="Stats resume">
           <PokemonStat label="Health points" shortLabel="Hp" value={pokemon.stats.hp} />
           <PokemonStat label="Attack" shortLabel="At" value={pokemon.stats.attack} />
           <PokemonStat label="Defense" shortLabel="Df" value={pokemon.stats.defense} />
-          <PokemonStat
-            label="Special attack"
-            shortLabel="SpA"
-            value={pokemon.stats.specialAttack}
-          />
-          <PokemonStat
-            label="Special defense"
-            shortLabel="SpD"
-            value={pokemon.stats.specialDefense}
-          />
+          <PokemonStat label="Special attack" shortLabel="SpA" value={pokemon.stats.specialAttack} />
+          <PokemonStat label="Special defense" shortLabel="SpD" value={pokemon.stats.specialDefense} />
           <PokemonStat label="Speed" shortLabel="Spd" value={pokemon.stats.speed} />
         </ul>
       </section>

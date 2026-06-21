@@ -605,8 +605,152 @@ custom-progress::-ms-fill {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+
+
 }
 
 /* -------------- */
 /* Dropdown - end */
 /* -------------- */
+/* ---------------------- */
+/* Favorite button- start */
+/* ---------------------- */
+
+.favorite-btn {
+  position: absolute;
+  bottom: 0;
+  right: var(--spacing-xs);
+  transform: translateY(-50%);
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2rem;
+  height: 2rem;
+
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--color-neutral-0);
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  transition: background-color 0.15s;
+}
+
+.favorite-btn:hover {
+  background-color: color-mix(
+    in oklab,
+    var(--color-neutral-900),
+    transparent 40%
+  );
+}
+
+.favorite-btn.active {
+  background-color: color-mix(
+    in oklab,
+    var(--color-neutral-900),
+    transparent 40%
+  );
+}
+
+/* -------------------- */
+/* Favorite button- end */
+/* -------------------- */
+
+/* ------------------- */
+/* Dream team - start  */
+/* ------------------- */
+
+.dream-team {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-2xl) var(--spacing-m);
+}
+
+.dream-team__card {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, #f9c5d1, #c5b9f0, #a0d8ef);
+  padding: var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-l);
+  box-shadow: var(--shadow-l);
+}
+
+.dream-team__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-0);
+  padding: var(--spacing-2xs) var(--spacing-m);
+  border-radius: var(--radius-m);
+}
+
+.dream-team__pokemons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;        /* ← no wrap, todos en una fila */
+  width: 100%;
+}
+
+.dream-team__pokemon-img {
+  width: 100px;             /* ← un poco más pequeños para que quepan */
+  height: 100px;
+  object-fit: contain;
+  margin-left: -20px;       /* ← superposición ligera */
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+}
+
+.dream-team__pokemon-img:first-child {
+  margin-left: 0;           /* ← el primero sin margen negativo */
+}
+
+.dream-team__types {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dream-team__type-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* ----------------- */
+/* Dream team - end  */
+/* ----------------- */
+
+.header__dream-team {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+
+  padding: var(--spacing-2xs) var(--spacing-s);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-accent);
+
+  transition: background-color 0.15s;
+
+  &:hover {
+    background-color: color-mix(
+      in oklab,
+      var(--color-accent),
+      transparent 90%
+    );
+  }
+}

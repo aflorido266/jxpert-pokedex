@@ -1,10 +1,20 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { App } from "./App";
+import { FavoritesPage } from "./ui/pages/FavoritesPage"; // ← añadir
+import { DreamTeamPage } from "./ui/pages/DreamTeamPage";
 
 const routes = {
   home: {
     path: "/",
     element: App,
+  },
+  favorites: {                    // ← añadir
+    path: "/favorites",
+    element: FavoritesPage,
+  },
+  dreamTeam: {          // ← añadir
+    path: "/dream-team",
+    element: DreamTeamPage,
   },
 };
 
