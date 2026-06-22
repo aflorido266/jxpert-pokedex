@@ -1,8 +1,6 @@
 import { Pokemon,PokemonStats,PokemonTypeName  } from "../../core/entities/Pokemon";
 
 
-
-
 interface RawStatEntry {
   base_stat: number;
   stat: { name: string };

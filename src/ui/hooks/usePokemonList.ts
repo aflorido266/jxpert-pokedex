@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Pokemon } from "../../core/entities/Pokemon";
-import type { PokemonSortOption } from "../application/useCases/sortPokemon";
+import type { PokemonSortOption } from "../../application/useCases/sortPokemon";
 import type { PokemonRegionName } from "../../infrastructure/api/regions";
 import { PokeApiPokemonRepository } from "../../infrastructure/api/PokeApiPokemonRepository";
 import { getPokemonByRegion } from "../../application/getPokemonByRegion";

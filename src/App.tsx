@@ -35,10 +35,10 @@ export const App = () => {
           setreg={setreg}
           showregs={showregs}
           setShowregs={setShowregs}
-          showSort={showSort} // ← faltaba
-          setShowSort={setShowSort} // ← faltaba
-          sorting={sorting} // ← faltaba
-          setSort={setSort} // ← faltaba
+          showSort={showSort} 
+          setShowSort={setShowSort} 
+          sorting={sorting} 
+          setSort={setSort} 
         />
         <section>
           {(ldr || fltr) && (
