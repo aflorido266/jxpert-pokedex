@@ -1,7 +1,7 @@
 import { useFavoritesList } from '../hooks/useFavoritesList'
 import { PokemonGrid } from '../components/organisms/PokemonGrid'
 import { Header } from '../components/organisms/Header'
-import { Footer } from '../components/organisms/footer'
+import { Footer } from "../components/organisms/Footer"
 
 export function FavoritesPage() {
   const { favorites } = useFavoritesList()

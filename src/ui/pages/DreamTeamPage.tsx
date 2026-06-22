@@ -1,7 +1,7 @@
 import { useFavoritesList } from "../hooks/useFavoritesList";
 import { PokemonTypeIcon } from "../components/atoms/PokemonTypeIcon";
 import { Header } from "../components/organisms/Header";
-import { Footer } from "../components/organisms/footer";
+import { Footer } from "../components/organisms/Footer";
 
 export function DreamTeamPage() {
   const { favorites } = useFavoritesList();
