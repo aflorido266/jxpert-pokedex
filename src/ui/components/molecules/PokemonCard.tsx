@@ -4,6 +4,10 @@ import { PokemonTypeIcon } from "../atoms/PokemonTypeIcon";
 import { PokemonStat } from "../atoms/PokemonStat";
 import { FavoriteButton } from "../atoms/FavoriteButton"; // ← añadir
 
+interface PokemonCardProps {  // ← añadir esto
+  pokemon: Pokemon;
+}
+
 // PokemonCard.tsx — mover FavoriteButton fuera del header
 export function PokemonCard({ pokemon }: PokemonCardProps) {
   const customStyles = {
